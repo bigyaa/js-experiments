@@ -1,0 +1,36 @@
+.slider-container {
+  height: 500px;
+  width: 1000px;
+  border: 1px solid black;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+#slider {
+  position: absolute;
+}
+
+.image {
+  height: 500px;
+  width: 1000px;
+  float: left;
+}
+
+.next {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+}
+
+.previous {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+}
+
+.icon {
+  background-color: white;
+  padding: 10px 15px;
+  border-radius: 50%;
+}
