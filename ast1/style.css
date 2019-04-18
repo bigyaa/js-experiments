@@ -56,6 +56,6 @@
 #pageIndicators {
   position: absolute;
   bottom: 20px;
-  left: 380px;
-  float: left;
+  width: 100%;
+  text-align: center;
 }
