@@ -105,11 +105,11 @@ function init() {
           // Increase value of x-axis of circle by the diameter of the colliding circle
           let updatedX = x + circleArray[i].radius * 2;
 
-          if (updatedX > canvas.width - 2 * radius) {
-            updatedX = x - circleArray[i].radius * 2;
-          } else {
-            updatedX = x + circleArray[i].radius * 2;
-          }
+          // if (updatedX > canvas.width - 2 * radius) {
+          //   updatedX = x - circleArray[i].radius * 2;
+          // } else {
+          updatedX = x + circleArray[i].radius * 2;
+          // }
 
           x = updatedX;
           i = -1;
