@@ -1,6 +1,6 @@
 const SCROLLBAR_HEIGHT = 5;
 const SCROLLBAR_WIDTH = 5;
-const numOfCircles = 50;
+const numOfCircles = 15;
 const maxRadius = 100;
 const minRadius = 10;
 
@@ -89,7 +89,7 @@ function Circle(x, y, radius, dx, dy) {
   this.getRandomColor = () => {
     this.CircleColor = `rgb(${this.redValue},${this.greenValue},${
       this.blueValue
-    })`;
+      })`;
 
     return this.CircleColor;
   };
@@ -115,6 +115,7 @@ function Circle(x, y, radius, dx, dy) {
     if (this.y >= canvas.height - this.radius || this.y <= this.radius) {
       this.dy = -this.dy;
     }
+
   };
 
   this.resolveCollision = circleArray => {
@@ -122,9 +123,9 @@ function Circle(x, y, radius, dx, dy) {
 
     for (let i = 0; i < circleArray.length; i++) {
       if (
-        (this != circleArray[i]) &
-        (distance(this.x, this.y, circleArray[i].x, circleArray[i].y) <=
-          this.radius + circleArray[i].radius)
+        (this != circleArray[i]) &&
+        ((distance(this.x, this.y, circleArray[i].x, circleArray[i].y) <=
+          this.radius + circleArray[i].radius))
       ) {
         resolveCircleCollision(this, circleArray[i]);
       }
@@ -135,7 +136,7 @@ function Circle(x, y, radius, dx, dy) {
 
 //Calculate distance between circles
 function distance(x1, y1, x2, y2) {
-  return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y1 - y1, 2));
+  return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
 
 function getRandomIntBetween(min, max) {
@@ -160,7 +161,7 @@ function init() {
           circleArray[i].y
         );
         if (
-          (i != index) &
+          (i != index) &&
           (distBetweenCentres < radius + circleArray[i].radius)
         ) {
           // Increase value of x-axis of circle by the diameter of the colliding circle

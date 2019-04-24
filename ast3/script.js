@@ -1,6 +1,7 @@
 const SCROLLBAR_WIDTH = 5;
 const fgHeight = 100;
 const gapBetweenPipes = 125;
+const GRAVITY = 2.5;
 
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
@@ -24,7 +25,7 @@ var birdY = 180;
 
 // Action when key press event
 function moveUp() {
-  birdY -= 20;
+  birdY -= 55;
 }
 
 document.addEventListener('keypress', moveUp);
@@ -33,7 +34,7 @@ var pipe = [];
 
 pipe[0] = {
   pipeX: canvas.width,
-  pipeY: -100,
+  pipeY: -50,
 };
 
 function draw() {
@@ -50,10 +51,10 @@ function draw() {
     );
 
     // Create the illusion of moving pipes
-    pipe[index].pipeX--;
+    pipe[index].pipeX -= 2;
 
     // Generate new pipes after previous pipes reach certain x axis
-    if (pipe[index].pipeX === canvas.width / 1.5) {
+    if (pipe[index].pipeX === Math.floor(canvas.width / 1.75)) {
       pipe.push({
         pipeX: canvas.width,
         pipeY: Math.random() * pipeTop.height - pipeTop.height,
@@ -66,7 +67,7 @@ function draw() {
         birdX <= pipe[index].pipeX + pipeTop.width &&
         (birdY <= pipe[index].pipeY + pipeTop.height ||
           birdY + bird.height >=
-            pipe[index].pipeY + pipeTop.height + gapBetweenPipes)) ||
+          pipe[index].pipeY + pipeTop.height + gapBetweenPipes)) ||
       birdY + bird.height >= canvas.height - fg.height
     ) {
       // reload the page
@@ -77,7 +78,7 @@ function draw() {
   context.drawImage(fg, 0, canvas.height - fgHeight, canvas.width, fgHeight);
   context.drawImage(bird, birdX, birdY, 50, 50);
 
-  birdY++;
+  birdY += GRAVITY;
 
   requestAnimationFrame(draw);
 }
