@@ -12,14 +12,6 @@ var index = 0;
 
 slider.style.width = -SLIDER_MAX + 'px';
 
-function reset() {
-  for (index = 0; index < numOfImages; index++) {
-    sliderImages[index].style.display = 'none';
-  }
-  left = 0;
-  displayImages();
-}
-
 function previousImage() {
   previous.onclick = function (event) {
     if (left <= -IMAGE_WIDTH) {

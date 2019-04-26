@@ -79,15 +79,15 @@ class Game {
 
     context.drawImage(openingMessage, 20, 20, this.canvas.width - 40, this.canvas.height - 40);
 
+    this.canvas.addEventListener('click', () => {
+      this.draw();
+    });
+
     document.addEventListener('keyup', (event) => {
       if (event.keyCode === 32) {
         flappyBird.birdY = flappyBird.birdY - 55;
         audioFly.play();
       }
-    });
-
-    this.canvas.addEventListener('click', () => {
-      this.draw();
     });
   }
 
