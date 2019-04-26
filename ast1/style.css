@@ -3,7 +3,7 @@
   width: 1000px;
   border: 1px solid black;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   margin: 0 auto;
 }
 
@@ -15,6 +15,7 @@
   height: 500px;
   width: 1000px;
   float: left;
+  display: block;
 }
 
 #next {
@@ -45,13 +46,13 @@
   padding: 20px;
   margin: 10px;
   border-radius: 50%;
-  background-color: rgb(255, 255, 255, 30%);
+  background-color: rgb(255, 255, 255, 10%);
 }
 
-.indicator-button:hover {
+/* .indicator-button:hover {
   cursor: pointer;
   background-color: rgb(255, 255, 255, 80%);
-}
+} */
 
 #pageIndicators {
   position: absolute;
