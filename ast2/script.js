@@ -1,8 +1,8 @@
 const SCROLLBAR_HEIGHT = 5;
 const SCROLLBAR_WIDTH = 5;
-const numOfCircles = 100;
-const maxRadius = 60;
-const minRadius = 30;
+const numOfCircles = 555;
+const maxRadius = 30;
+const minRadius = 1;
 
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
