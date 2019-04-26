@@ -21,20 +21,21 @@ function reset() {
 }
 
 function previousImage() {
-  //Show previous image
-  if (left <= -IMAGE_WIDTH) {
-    left = left + IMAGE_WIDTH;
-    slider.style.left = left + 'px';
-  }
+  previous.onclick = function (event) {
+    if (left <= -IMAGE_WIDTH) {
+      left = left + IMAGE_WIDTH;
+      slider.style.left = left + 'px';
+    }
+  };
 }
 
 function nextImage() {
-  //Show next image
-  if (left > SLIDER_MAX + IMAGE_WIDTH) {
-    left = left - IMAGE_WIDTH;
-    slider.style.left = left + 'px';
-  }
-
+  next.onclick = function (event) {
+    if (left > SLIDER_MAX + IMAGE_WIDTH) {
+      left = left - IMAGE_WIDTH;
+      slider.style.left = left + 'px';
+    }
+  };
 }
 
 function slide() {
@@ -42,10 +43,8 @@ function slide() {
     left = left + direction;
     slider.style.left = left + 'px';
 
-    if (left < SLIDER_MAX + IMAGE_WIDTH) {
+    if (left <= SLIDER_MAX + IMAGE_WIDTH) {
       direction = 150;
-      // reset();
-      // slider.style.left = left + 'px';
     }
 
     if (left >= 0) {

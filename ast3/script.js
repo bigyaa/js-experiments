@@ -1,124 +1,161 @@
 const SCROLLBAR_WIDTH = 5;
-const fgHeight = 100;
-const gapBetweenPipes = 125;
+const foregroundHeight = 100;
+const gapBetweenPipes = 110;
 const GRAVITY = 2.5;
 
-var canvas = document.getElementById('canvas');
-var context = canvas.getContext('2d');
-
-canvas.width = 600;
-canvas.height = 500;
-canvas.style.width = 600 + 'px';
-canvas.style.height = 500 + 'px';
-canvas.style.border = 1 + 'px' + ' solid black';
-canvas.style.transform = 'translate(' + 70 + '%' + ',' + 0 + '%)';
-
-var bg = document.getElementById('bg');
+var background = document.getElementById('background');
 var pipeTop = document.getElementById('topPipe');
 var pipeBottom = document.getElementById('bottomPipe');
-var bird = document.getElementById('bird');
-var fg = document.getElementById('fg');
-var msg = document.getElementById('msg');
+var birdImage = document.getElementById('birdImage');
+var foreground = document.getElementById('foreground');
+var openingMessage = document.getElementById('openingMessage');
 
 var audioFly = new Audio();
 var audioScore = new Audio();
 
-var score = 0;
-let index;
+var context;
+var pipe;
+var flappyBird;
 
 audioFly.src = "sounds/fly.mp3";
 audioScore.src = "sounds/score.mp3";
 
-// Initial bird position
-var birdX = 55;
-var birdY = 180;
 
-// Action when key press event
-function moveUp() {
-  birdY -= 55;
-  audioFly.play();
-}
-
-var pipe = [];
-
-pipe[0] = {
-  pipeX: canvas.width,
-  pipeY: -50,
-};
-
-// Check Conditions
-function birdReachesStartingPipeX(index) {
-  if (birdX + bird.width >= pipe[index].pipeX) { return true; } else { return false; }
-}
-
-function birdReachesEndingPipeX(index) {
-  if (birdX + bird.width <= pipe[index].pipeX + pipeTop.width) { return true; } else { return false; }
-}
-
-function birdFliesAboveGap(index) {
-  if (birdY <= pipe[index].pipeY + pipeTop.height) { return true; } else { return false; }
-}
-
-function birdFliesBelowGap(index) {
-  if (birdY + bird.height >= pipe[index].pipeY + pipeTop.height + gapBetweenPipes) { return true; } else { return false; }
-}
-
-function birdFliesBelowForeground(index) {
-  if (birdY + bird.height >= canvas.height - fg.height) { return true; } else { return false; }
-}
-
-function draw() {
-  // Draw background image
-  context.drawImage(bg, 0, 0, canvas.width, canvas.height);
-  document.addEventListener('keypress', moveUp);
-
-  // Draw pipes
-  for (index = 0; index < pipe.length; index++) {
-    context.drawImage(pipeTop, pipe[index].pipeX, pipe[index].pipeY);
-    context.drawImage(
-      pipeBottom,
-      pipe[index].pipeX,
-      pipe[index].pipeY + pipeTop.height + gapBetweenPipes
-    );
-
-    // Create the illusion of moving pipes
-    pipe[index].pipeX -= 2;
-
-    // Generate new pipes after previous pipes reach certain x axis
-    if (pipe[index].pipeX === Math.floor(canvas.width / 1.75)) {
-      pipe.push({
-        pipeX: canvas.width,
-        pipeY: Math.random() * pipeTop.height - pipeTop.height,
-      });
-    }
-
-    // Check for losing and scoring conditions
-    if (
-      (birdReachesStartingPipeX(index) && birdReachesEndingPipeX(index) && (birdFliesAboveGap(index) ||
-        birdFliesBelowGap(index))) || birdFliesBelowForeground(index)) {
-      location.reload();
-    } else if (birdReachesStartingPipeX(index) && birdReachesEndingPipeX(index) && !birdFliesAboveGap(index) && !birdFliesBelowGap(index)) {
-      score++;
-      audioScore.play();
-    }
-
+class Bird {
+  constructor(birdX = 5, birdY = 180) {
+    this.birdX = birdX;
+    this.birdY = birdY;
+    this.score = 0;
   }
 
-  context.drawImage(bird, birdX, birdY, 50, 50);
-  context.drawImage(fg, 0, canvas.height - fgHeight, canvas.width, fgHeight);
+  drawBird() {
+    context.drawImage(birdImage, this.birdX, this.birdY);
+  }
 
-  birdY += GRAVITY;
-
-  context.fillStyle = "#FFF";
-  context.font = "20px Verdana";
-  context.fillText("Score : " + score, 10, canvas.height - 20);
-
-  requestAnimationFrame(draw);
+  increaseScore() {
+    this.score += 1;
+    audioScore.play();
+  }
 }
 
-// Main execution part
-context.drawImage(msg, 20, 20, canvas.width - 40, canvas.height - 40);
 
-window.addEventListener('click', event => {
-  draw();
-});
+class Pipe {
+  constructor(pipeX = canvas.width, pipeY = -5) {
+    this.pipeX = pipeX;
+    this.pipeY = pipeY;
+  }
+
+  drawPipe() {
+    context.drawImage(pipeTop, this.pipeX, this.pipeY);
+    context.drawImage(
+      pipeBottom,
+      this.pipeX,
+      this.pipeY + pipeTop.height + gapBetweenPipes
+    );
+  }
+
+  movePipe() {
+    this.pipeX -= 2;
+  }
+}
+
+
+class Game {
+  constructor(canvas) {
+    this.canvas = canvas;
+  }
+
+  start() {
+    context = this.canvas.getContext('2d');
+
+    this.canvas.width = 600;
+    this.canvas.height = 450;
+    this.canvas.style.width = 600 + 'px';
+    this.canvas.style.height = 450 + 'px';
+    this.canvas.style.border = 1 + 'px' + ' solid black';
+
+    flappyBird = new Bird();
+    pipe = [new Pipe()];
+
+    context.drawImage(openingMessage, 20, 20, this.canvas.width - 40, this.canvas.height - 40);
+
+    document.addEventListener('keyup', (event) => {
+      if (event.keyCode === 32) {
+        flappyBird.birdY = flappyBird.birdY - 55;
+        audioFly.play();
+      }
+    });
+
+    this.canvas.addEventListener('click', () => {
+      this.draw();
+    });
+  }
+
+  draw() {
+    // Draw background image
+    context.drawImage(background, 0, 0, canvas.width, canvas.height);
+    flappyBird.drawBird();
+
+    // Draw pipes
+    for (let index = 0; index < pipe.length; index++) {
+      pipe[index].drawPipe();
+
+      // Create the illusion of moving pipes
+      pipe[index].movePipe();
+
+      // Generate new pipes after previous pipes reach certain x axis
+      if (pipe[index].pipeX === Math.floor(canvas.width / 1.75)) {
+        pipe.push(new Pipe(canvas.width, Math.floor(Math.random() * pipeTop.height) - pipeTop.height));
+      }
+
+      // Check for losing and scoring conditions
+      if (
+        (this.birdReachesStartingPipeX(index) && this.birdReachesEndingPipeX(index) && (this.birdFliesAboveGap(index) ||
+          this.birdFliesBelowGap(index))) || this.birdFliesBelowForeground(index)) {
+        location.reload();
+      }
+
+      // if (this.pipeX + pipeTop.width === flappyBird.birdX) {
+      if (this.birdReachesStartingPipeX(index) && this.birdReachesEndingPipeX(index) && !this.birdFliesAboveGap(index) &&
+        !this.birdFliesBelowGap(index)) {
+        flappyBird.increaseScore();
+        audioScore.play();
+
+      }
+    }
+    context.drawImage(foreground, 0, canvas.height - foregroundHeight, canvas.width, foregroundHeight);
+
+    flappyBird.birdY += GRAVITY;
+
+    context.fillStyle = "#FFF";
+    context.font = "20px Arial";
+    context.fillText("Score : " + flappyBird.score / 26, 10, canvas.height - 20);
+
+    requestAnimationFrame(() => { this.draw() });
+  }
+
+  // Collision Conditions
+  birdReachesStartingPipeX(index) {
+    return (flappyBird.birdX + birdImage.width >= pipe[index].pipeX) ? true : false;
+  }
+
+  birdReachesEndingPipeX(index) {
+    return (flappyBird.birdX + birdImage.width <= pipe[index].pipeX + pipeTop.width) ? true : false;
+  }
+
+  birdFliesAboveGap(index) {
+    return (flappyBird.birdY <= pipe[index].pipeY + pipeTop.height) ? true : false;
+  }
+
+  birdFliesBelowGap(index) {
+    return (flappyBird.birdY + birdImage.height >= pipe[index].pipeY + pipeTop.height + gapBetweenPipes) ? true : false;
+  }
+
+  birdFliesBelowForeground() {
+    return (flappyBird.birdY + birdImage.height >= canvas.height - foreground.height) ? true : false;
+  }
+}
+
+var game = new Game(document.getElementById('canvas'));
+game.start();
+

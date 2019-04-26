@@ -3,7 +3,7 @@
   width: 1000px;
   border: 1px solid black;
   position: relative;
-  /* overflow: hidden; */
+  overflow: hidden;
   margin: 0 auto;
 }
 

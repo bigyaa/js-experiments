@@ -1,8 +1,8 @@
 const SCROLLBAR_HEIGHT = 5;
 const SCROLLBAR_WIDTH = 5;
-const numOfCircles = 33;
-const maxRadius = 140;
-const minRadius = 60;
+const numOfCircles = 100;
+const maxRadius = 60;
+const minRadius = 30;
 
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
@@ -32,8 +32,8 @@ function init() {
     var radius = getRandomIntBetween(minRadius, maxRadius);
     var x = getRandomIntBetween(radius, canvas.width - radius);
     var y = getRandomIntBetween(radius, canvas.height - radius);
-    var dx = (Math.random() - 0.5) * 15;
-    var dy = (Math.random() - 0.5) * 15;
+    var dx = (Math.random() - 0.5) * 25;
+    var dy = (Math.random() - 0.5) * 25;
 
     // To avoid generation of overlapping circles
     if (index != 0) {
