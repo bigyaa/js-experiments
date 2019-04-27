@@ -36,6 +36,7 @@ function slide() {
     slider.style.left = left + 'px';
 
     if (left <= SLIDER_MAX + IMAGE_WIDTH) {
+      console.log(left);
       direction = 150;
     }
 
@@ -46,8 +47,20 @@ function slide() {
     previousImage();
     nextImage();
 
+    if (left === 0) {
+      previous.style.display = 'none';
+    } else {
+      previous.style.display = 'block';
+    }
+
+    if (left === (SLIDER_MAX + IMAGE_WIDTH)) {
+      next.style.display = 'none';
+    } else {
+      next.style.display = 'block';
+    }
+
     //Pause on each image
-    if (direction === -10 && left % IMAGE_WIDTH === 0) {
+    if ((direction === -10 && left % IMAGE_WIDTH === 0) || left === SLIDER_MAX + IMAGE_WIDTH) {
       clearInterval(interval);
       setTimeout(function () {
         slide();
