@@ -3,15 +3,16 @@ const foregroundHeight = 100;
 const gapBetweenPipes = 110;
 const GRAVITY = 2.5;
 
+var openingMessage = document.getElementById('openingMessage');
 var background = document.getElementById('background');
 var pipeTop = document.getElementById('topPipe');
 var pipeBottom = document.getElementById('bottomPipe');
 var birdImage = document.getElementById('birdImage');
 var foreground = document.getElementById('foreground');
-var openingMessage = document.getElementById('openingMessage');
 
 var audioFly = new Audio();
 var audioScore = new Audio();
+var audioDie = new Audio();
 
 var context;
 var pipe;
@@ -19,6 +20,7 @@ var flappyBird;
 
 audioFly.src = "sounds/fly.mp3";
 audioScore.src = "sounds/score.mp3";
+audioDie.src = "sounds/die.mp3";
 
 
 class Bird {
@@ -85,7 +87,9 @@ class Game {
 
     document.addEventListener('keyup', (event) => {
       if (event.keyCode === 32) {
+
         flappyBird.birdY = flappyBird.birdY - 55;
+
         audioFly.play();
       }
     });
@@ -112,17 +116,23 @@ class Game {
       if (
         (this.birdReachesStartingPipeX(index) && this.birdReachesEndingPipeX(index) && (this.birdFliesAboveGap(index) ||
           this.birdFliesBelowGap(index))) || this.birdFliesBelowForeground(index)) {
-        location.reload();
+
+        audioDie.play();
+
+        setTimeout(() => {
+          location.reload();
+        }, 350);
       }
 
-      // if (this.pipeX + pipeTop.width === flappyBird.birdX) {
       if (this.birdReachesStartingPipeX(index) && this.birdReachesEndingPipeX(index) && !this.birdFliesAboveGap(index) &&
         !this.birdFliesBelowGap(index)) {
-        flappyBird.increaseScore();
-        audioScore.play();
 
+        flappyBird.increaseScore();
+
+        audioScore.play();
       }
     }
+
     context.drawImage(foreground, 0, canvas.height - foregroundHeight, canvas.width, foregroundHeight);
 
     flappyBird.birdY += GRAVITY;
@@ -135,23 +145,29 @@ class Game {
   }
 
   // Collision Conditions
+
   birdReachesStartingPipeX(index) {
+
     return (flappyBird.birdX + birdImage.width >= pipe[index].pipeX) ? true : false;
   }
 
   birdReachesEndingPipeX(index) {
+
     return (flappyBird.birdX + birdImage.width <= pipe[index].pipeX + pipeTop.width) ? true : false;
   }
 
   birdFliesAboveGap(index) {
+
     return (flappyBird.birdY <= pipe[index].pipeY + pipeTop.height) ? true : false;
   }
 
   birdFliesBelowGap(index) {
+
     return (flappyBird.birdY + birdImage.height >= pipe[index].pipeY + pipeTop.height + gapBetweenPipes) ? true : false;
   }
 
   birdFliesBelowForeground() {
+
     return (flappyBird.birdY + birdImage.height >= canvas.height - foreground.height) ? true : false;
   }
 }
