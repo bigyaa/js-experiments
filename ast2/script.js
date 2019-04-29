@@ -32,8 +32,8 @@ function init() {
     var radius = getRandomIntBetween(minRadius, maxRadius);
     var x = getRandomIntBetween(radius, canvas.width - radius);
     var y = getRandomIntBetween(radius, canvas.height - radius);
-    var dx = (Math.random() - 0.5) * 25;
-    var dy = (Math.random() - 0.5) * 25;
+    var dx = (Math.random() - 0.5) * 10;
+    var dy = (Math.random() - 0.5) * 10;
 
     // To avoid generation of overlapping circles
     if (index != 0) {
