@@ -81,7 +81,7 @@ class Game {
 
     context.drawImage(openingMessage, 20, 20, this.canvas.width - 40, this.canvas.height - 40);
 
-    this.canvas.addEventListener('click', () => {
+    this.canvas.addEventListener('mousedown', () => {
       this.draw();
     });
 
