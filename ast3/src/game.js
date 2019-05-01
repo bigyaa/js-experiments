@@ -1,67 +1,3 @@
-const SCROLLBAR_WIDTH = 5;
-const foregroundHeight = 100;
-const gapBetweenPipes = 110;
-const GRAVITY = 2.5;
-
-var openingMessage = document.getElementById('openingMessage');
-var background = document.getElementById('background');
-var pipeTop = document.getElementById('topPipe');
-var pipeBottom = document.getElementById('bottomPipe');
-var birdImage = document.getElementById('birdImage');
-var foreground = document.getElementById('foreground');
-
-var audioFly = new Audio();
-var audioScore = new Audio();
-var audioDie = new Audio();
-
-var context;
-var pipe;
-var flappyBird;
-
-audioFly.src = "sounds/fly.mp3";
-audioScore.src = "sounds/score.mp3";
-audioDie.src = "sounds/die.mp3";
-
-
-class Bird {
-  constructor(birdX = 5, birdY = 180) {
-    this.birdX = birdX;
-    this.birdY = birdY;
-    this.score = 0;
-  }
-
-  drawBird() {
-    context.drawImage(birdImage, this.birdX, this.birdY);
-  }
-
-  increaseScore() {
-    this.score += 1;
-    audioScore.play();
-  }
-}
-
-
-class Pipe {
-  constructor(pipeX = canvas.width, pipeY = -5) {
-    this.pipeX = pipeX;
-    this.pipeY = pipeY;
-  }
-
-  drawPipe() {
-    context.drawImage(pipeTop, this.pipeX, this.pipeY);
-    context.drawImage(
-      pipeBottom,
-      this.pipeX,
-      this.pipeY + pipeTop.height + gapBetweenPipes
-    );
-  }
-
-  movePipe() {
-    this.pipeX -= 2;
-  }
-}
-
-
 class Game {
   constructor(canvas) {
     this.canvas = canvas;
@@ -144,6 +80,7 @@ class Game {
     requestAnimationFrame(() => { this.draw() });
   }
 
+
   // Collision Conditions
 
   birdReachesStartingPipeX(index) {
@@ -171,7 +108,3 @@ class Game {
     return (flappyBird.birdY + birdImage.height >= canvas.height - foreground.height) ? true : false;
   }
 }
-
-var game = new Game(document.getElementById('canvas'));
-game.start();
-
